@@ -43,7 +43,7 @@
         <div class="mt-10 lg:pl-[240px]" id="page-content" style="margin-right: 0px; transition: all 0.3s linear 0s;">
             <div
                 class=" prose dark:prose-invert max-w-[540px] sm:max-w-[604px] md:max-w-[720px] lg:max-w-[972px] xl:max-w-full xl:px-12 2xl:max-w-[1400px] mx-auto flex">
-                <div class="flex w-full h-full flex-col ">
+                <div class="flex flex-col w-full h-full ">
                     @isset($slot)
                         {{ $slot }}
                     @endisset
@@ -53,8 +53,9 @@
     </main>
 
     <x-footer />
-
-
+    <div class=" z-[1055]">
+        @livewire('livewire-ui-modal')
+    </div>
 </body>
 
 </html>

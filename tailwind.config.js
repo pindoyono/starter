@@ -1,6 +1,19 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+    purge: {
+        content: [
+          './vendor/wire-elements/modal/resources/views/*.blade.php',
+          './storage/framework/views/*.php',
+          './resources/views/**/*.blade.php',
+        ],
+        options: {
+          safelist: [
+            'sm:max-w-2xl'
+          ]
+        }
+      },
+
     darkMode: 'class',
     theme: {
         extend: {
@@ -28,7 +41,8 @@ module.exports = {
         // tailwind-elemend
 
         "./resources/**/*.blade.php",
-        "./node_modules/tw-elements/dist/js/**/*.js"
+        "./node_modules/tw-elements/dist/js/**/*.js",
+
     ],
     plugins: [
         require('@tailwindcss/forms'),
