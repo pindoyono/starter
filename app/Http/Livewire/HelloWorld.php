@@ -6,6 +6,8 @@ use LivewireUI\Modal\ModalComponent;
 
 class HelloWorld extends ModalComponent
 {
+    public int $counter = 0;
+
     public static function modalMaxWidth(): string
     {
         // 'sm'
@@ -19,6 +21,12 @@ class HelloWorld extends ModalComponent
         // '6xl'
         // '7xl'
         return '4xl';
+    }
+
+
+    public function update()
+    {
+        $this->counter++;
     }
 
     public function render()
