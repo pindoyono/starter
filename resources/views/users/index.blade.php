@@ -4,6 +4,6 @@
             Data Pengguna
         </h3>
         <hr>
-        {{-- <livewire:user-table /> --}}
+        <livewire:user-table />
     </div>
 </x-mdb>

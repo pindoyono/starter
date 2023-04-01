@@ -30,10 +30,10 @@
                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                x-bind:class="modalWidth"
-                class="inline-block w-full overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:w-full"
+                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" {{-- x-bind:class="modalWidth" --}}
+                class="inline-block w-full overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:max-w-md md:max-w-xl lg:max-w-3xl xl:max-w-4xl sm:my-8 sm:align-middle sm:w-full"
                 id="modal-container">
+                {{-- sm:max-w-md md:max-w-xl lg:max-w-3xl xl:max-w-4xl --}}
                 @forelse($components as $id => $component)
                     <div x-show.immediate="activeComponent == '{{ $id }}'" x-ref="{{ $id }}"
                         wire:key="{{ $id }}">

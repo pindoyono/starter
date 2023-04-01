@@ -18,8 +18,7 @@
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
-    @livewireScripts
-
+    @powerGridStyles
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -56,6 +55,8 @@
     <div class=" z-[1055]">
         @livewire('livewire-ui-modal')
     </div>
+    @powerGridScripts
+    @livewireScripts
 </body>
 
 </html>
