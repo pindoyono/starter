@@ -17,7 +17,11 @@
         </div>
     </div>
 
-    <div class="px-4 pb-5 bg-white sm:px-4 sm:flex">
+    {{-- <div class="px-4 pb-5 bg-white sm:px-4 sm:flex">
+        {{ $buttons }}
+    </div> --}}
+    <div
+        class="flex flex-wrap items-center justify-end flex-shrink-0 p-4 border-t-2 border-opacity-100 rounded-b-md border-neutral-100 dark:border-opacity-50">
         {{ $buttons }}
     </div>
     @if ($formAction)

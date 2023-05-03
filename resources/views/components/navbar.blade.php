@@ -1,5 +1,5 @@
 <nav id="main-navbar"
-    class="fixed top-0 right-0 left-0 flex w-full flex-nowrap items-center justify-between bg-white py-[0.6rem] text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700 dark:bg-zinc-700 lg:flex-wrap lg:justify-start xl:pl-60"
+    class="fixed top-0 z-50 right-0 left-0 flex w-full flex-nowrap items-center justify-between bg-white py-[0.6rem] text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700 dark:bg-zinc-700 lg:flex-wrap lg:justify-start xl:pl-60"
     data-te-navbar-ref>
     <!-- Container wrapper -->
     <div class="flex flex-wrap items-center justify-between w-full px-4">

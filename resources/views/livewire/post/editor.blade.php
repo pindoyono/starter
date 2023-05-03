@@ -1,6 +1,6 @@
 <x-modal formAction="update">
     <x-slot name="title">
-        Hello World
+        Update User
     </x-slot>
 
     <x-slot name="content">

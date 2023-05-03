@@ -2,35 +2,25 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\User;
-use Illuminate\Support\Carbon;
+use App\Models\Sekolah;
 use Illuminate\Database\Eloquent\Builder;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use PowerComponents\LivewirePowerGrid\Button;
+use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Exportable;
+use PowerComponents\LivewirePowerGrid\Footer;
+use PowerComponents\LivewirePowerGrid\Header;
+use PowerComponents\LivewirePowerGrid\PowerGrid;
+use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridEloquent;
+use PowerComponents\LivewirePowerGrid\Rules\Rule;
+use PowerComponents\LivewirePowerGrid\Rules\RuleActions;
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
-use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
-use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-final class UserTable extends PowerGridComponent
+
+final class SekolahTable extends PowerGridComponent
 {
     use ActionButton;
     use LivewireAlert;
-
-    public  $name = null;
-
-
-    protected array $rules = [
-        'name.*' => ['required', 'min:6'],
-    ];
-
-    public function onUpdatedEditable($id, $field, $value): void
-    {
-        $this->validate();
-
-        User::query()->find($id)->update([
-            $field => $value,
-        ]);
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +28,7 @@ final class UserTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Setup Table's general features
     |
-    */
+     */
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -51,7 +41,6 @@ final class UserTable extends PowerGridComponent
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
-
         ];
     }
 
@@ -59,13 +48,11 @@ final class UserTable extends PowerGridComponent
     {
         return [
             Button::make('tambah', 'Tambah')
-               ->openModal('users.add', [
-                            'confirmationTitle'       => 'Tambah User',
-                            'roles'       => Role::query()->get(),
-                        ])
+                ->openModal('sekolahs.add', [
+                    'confirmationTitle' => 'Tambah Sekolah',
+                ])
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
-
 
             Button::add('bulk-delete')
                 ->caption(__('Bulk delete'))
@@ -74,7 +61,7 @@ final class UserTable extends PowerGridComponent
         ];
     }
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     |  Event listeners
     |--------------------------------------------------------------------------
@@ -90,7 +77,7 @@ final class UserTable extends PowerGridComponent
             ]);
     }
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     |  Bulk delete button
     |--------------------------------------------------------------------------
@@ -103,12 +90,12 @@ final class UserTable extends PowerGridComponent
             return;
         }
 
-
-        $this->emit('openModal', 'users.delete', [
-            'userIds' => $this->checkboxValues,
-            'userNames' => User::query()->whereIn('id', $this->checkboxValues)->get('name'),
-            'confirmationTitle' => 'Delete User',
-            'confirmationDescription' => 'Are you sure you want to delete this user?',
+        $this->emit('openModal', 'sekolahs.delete', [
+            'SekolahIds' => $this->checkboxValues,
+            'SekolahNames' => Sekolah::query()->whereIn('id', $this->checkboxValues)->get('nama'),
+            'SekolahLogos' => Sekolah::query()->whereIn('id', $this->checkboxValues)->get('logo'),
+            'confirmationTitle' => 'Hapus Data',
+            'confirmationDescription' => 'Apakah anda yakin ingin menghapus data ini',
         ]);
     }
 
@@ -118,16 +105,16 @@ final class UserTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Provides data to your Table using a Model or Collection
     |
-    */
+     */
 
     /**
-    * PowerGrid datasource.
-    *
-    * @return Builder<\App\Models\User>
-    */
+     * PowerGrid datasource.
+     *
+     * @return Builder<\App\Models\Sekolah>
+     */
     public function datasource(): Builder
     {
-        return User::query();
+        return Sekolah::query();
     }
 
     /*
@@ -136,7 +123,7 @@ final class UserTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Configure here relationships to be used by the Search and Table Filters.
     |
-    */
+     */
 
     /**
      * Relationship search.
@@ -158,33 +145,31 @@ final class UserTable extends PowerGridComponent
     | ❗ IMPORTANT: When using closures, you must escape any value coming from
     |    the database using the `e()` Laravel Helper function.
     |
-    */
+     */
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
-            ->addColumn('name')
+            ->addColumn('logo', function (Sekolah $model) {
+                return '
+                <img  src="' . asset('storage/' . e($model->logo)) . '"  class="h-10 max-w-sm transition-shadow duration-300 ease-in-out rounded-lg shadow-none hover:shadow-lg hover:shadow-black/30" alt="" />';
+            })
+            ->addColumn('nama')
 
-           /** Example of custom column using a closure **/
-            ->addColumn('name_lower', function (User $model) {
-                return strtolower(e($model->name));
+        /** Example of custom column using a closure **/
+            ->addColumn('nama_lower', function (Sekolah $model) {
+                return strtolower(e($model->nama));
             })
 
-            ->addColumn('role', function (User $model) {
-                // return e( count($model->roles->pluck('name')));
-                $roles = "";
-                foreach ($model->getRoleNames() as $key => $role) {
-                    $roles .= "<span class='inline-block whitespace-nowrap rounded-full bg-info-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[0.75em] font-bold leading-none text-info-800'>".$role."</span>";
-                }
-                return e( count($model->roles->pluck('name'))) <= 0 ? "Tidak Ada Role" : $roles ;
-            })
-
-            ->addColumn('email')
-            ->addColumn('created_at_formatted', fn (User $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->addColumn('updated_at_formatted', fn (User $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->addColumn('alamat')
+            ->addColumn('tipe')
+            ->addColumn('kurikulum')
+            ->addColumn('no_hp')
+            ->addColumn('provinsi')
+            ->addColumn('kabupaten');
+        // ->addColumn('created_at_formatted', fn (Sekolah $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+        // ->addColumn('updated_at_formatted', fn (Sekolah $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
     }
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -193,9 +178,9 @@ final class UserTable extends PowerGridComponent
     | Include the columns added columns, making them visible on the Table.
     | Each column can be configured with properties, filters, actions...
     |
-    */
+     */
 
-     /**
+    /**
      * PowerGrid Columns.
      *
      * @return array<int, Column>
@@ -203,39 +188,60 @@ final class UserTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
-                ->makeInputRange(),
+            // Column::make('ID', 'id')
+            // ->makeInputRange(),
 
-            Column::make('NAME', 'name')
+            Column::make('LOGO', 'logo'),
+            // ->sortable()
+            // ->searchable(),
+
+            Column::make('NAMA', 'nama')
                 ->sortable()
                 ->searchable()
-                ->editOnClick()
                 ->makeInputText(),
 
-            Column::make('EMAIL', 'email')
+            Column::make('ALAMAT', 'alamat')
                 ->sortable()
-                ->searchable()
-                ->makeInputText(),
-
-            Column::make('Role', 'role')
-                // ->sortable(),
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
+            Column::make('TIPE', 'tipe')
+                ->sortable()
+                ->searchable()
+                ->makeInputText(),
 
+            Column::make('KURIKULUM', 'kurikulum')
+                ->sortable()
+                ->searchable()
+                ->makeInputText(),
+
+            Column::make('NO HP', 'no_hp')
+                ->sortable()
+                ->searchable(),
+            // ->makeInputText(),
+
+            Column::make('PROVINSI', 'provinsi')
+                ->sortable()
+                ->searchable(),
+            // ->makeInputText(),
+
+            Column::make('KABUPATEN', 'kabupaten')
+                ->sortable()
+                ->searchable()
+                ->makeInputText(),
 
             // Column::make('CREATED AT', 'created_at_formatted', 'created_at')
             //     ->searchable()
-            //     ->sortable()
-            //     ->makeInputDatePicker(),
+            //     ->sortable(),
+            // ->makeInputDatePicker(),
 
             // Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
             //     ->searchable()
-            //     ->sortable()
-            //     ->makeInputDatePicker(),
+            //     ->sortable(),
+            // ->makeInputDatePicker(),
 
         ]
-;
+        ;
     }
 
     /*
@@ -244,47 +250,43 @@ final class UserTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Enable the method below only if the Routes below are defined in your app.
     |
-    */
+     */
 
-     /**
-     * PowerGrid User Action Buttons.
+    /**
+     * PowerGrid Sekolah Action Buttons.
      *
      * @return array<int, Button>
      */
-
 
     public function actions(): array
     {
         $theme = config('livewire-powergrid.theme');
 
-        $edit   = ($theme == 'tailwind') ? 'bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm' : 'btn btn-primary';
+        $edit = ($theme == 'tailwind') ? 'bg-indigo-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm' : 'btn btn-primary';
 
         $delete = ($theme == 'tailwind') ? 'bg-red-500 text-white px-3 py-2 m-1 rounded text-sm' : 'btn btn-danger';
 
-       return [
-           Button::make('edit', 'Edit')
-               ->openModal('users.update', [
-                            'userId' => 'id',
-                            'confirmationTitle'       => 'Update User',
-                            'roles'       => Role::query()->get(),
-                        ])
-               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
+        return [
+            Button::make('edit', 'Edit')
+                ->openModal('sekolahs.update', [
+                    'sekolahId' => 'id',
+                    'confirmationTitle' => 'Update User',
+                ])
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
 
             Button::add('destroy')
-            ->caption(__('Delete'))
-            ->class('bg-red-500 text-white px-3 py-2 m-1 rounded text-sm')
-            ->openModal('users.delete', [
-                'userId'                  => 'id',
-                'userName'                => 'name',
-                'confirmationTitle'       => 'Delete User',
-                'confirmationDescription' => 'Are you sure you want to delete this user?',
-            ]),
+                ->caption(__('Delete'))
+                ->class('bg-red-500 text-white px-3 py-2 m-1 rounded text-sm')
+                ->openModal('sekolahs.delete', [
+                    'SekolahId' => 'id',
+                    'SekolahName' => 'nama',
+                    'confirmationTitle' => 'Hapus Data',
+                    'confirmationDescription' => 'Apakah Anda yakin inginmenghapus data ini?',
+                ]),
 
         ];
     }
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -292,24 +294,24 @@ final class UserTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Enable the method below to configure Rules for your Table and Action Buttons.
     |
-    */
+     */
 
-     /**
-     * PowerGrid User Action Rules.
+    /**
+     * PowerGrid Sekolah Action Rules.
      *
      * @return array<int, RuleActions>
      */
 
+    /*
+public function actionRules(): array
+{
+return [
 
-    public function actionRules(): array
-    {
-       return [
-
-           //Hide button edit for ID 1
-            Rule::button('destroy')
-                ->when(fn($user) => $user->id === 1)
-                ->hide(),
-
-        ];
-    }
+//Hide button edit for ID 1
+Rule::button('edit')
+->when(fn($sekolah) => $sekolah->id === 1)
+->hide(),
+];
+}
+ */
 }
