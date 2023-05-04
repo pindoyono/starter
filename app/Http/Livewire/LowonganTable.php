@@ -2,50 +2,16 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Perusahaan;
+use App\Models\Lowongan;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-final class PerusahaanTable extends PowerGridComponent
+final class LowonganTable extends PowerGridComponent
 {
     use ActionButton;
-    public  $nama = null;
-    public $bidang_usaha = null;
-    public $no_telpon = null;
-    public $fax = null;
-    public $email = null;
-    public $website = null;
-    public $npwp = null;
-    public $alamat = null;
-    public $rt = null;
-    public $rw = null;
-    public $nama_dusun = null;
-    public $kelurahan = null;
-    public $kecamatan = null;
-    public $kabupaten = null;
-    public $kode_pos = null;
-    public $lintang = null;
-    public $bujur = null;
-
-    protected array $rules = [
-        'nama.*' => ['required'],
-        'bidang_usaha.*' => ['required'],
-        'no_telpon.*' => ['required'],
-        'alamat.*' => ['required'],
-        'kode_pos.*' => ['required'],
-    ];
-
-    public function onUpdatedEditable($id, $field, $value): void
-    {
-        $this->validate();
-
-        Perusahaan::query()->find($id)->update([
-            $field => $value,
-        ]);
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -73,8 +39,8 @@ final class PerusahaanTable extends PowerGridComponent
     {
         return [
             Button::make('tambah', 'Tambah')
-                ->openModal('perusahaans.add', [
-                    'confirmationTitle' => 'Tambah Perusahaan',
+                ->openModal('lowongans.add', [
+                    'confirmationTitle' => 'Tambah Data',
                 ])
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
@@ -86,8 +52,7 @@ final class PerusahaanTable extends PowerGridComponent
         ];
     }
 
-
-     /*
+    /*
     |--------------------------------------------------------------------------
     |  Event listeners
     |--------------------------------------------------------------------------
@@ -103,7 +68,7 @@ final class PerusahaanTable extends PowerGridComponent
             ]);
     }
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     |  Bulk delete button
     |--------------------------------------------------------------------------
@@ -112,17 +77,17 @@ final class PerusahaanTable extends PowerGridComponent
     {
         if (count($this->checkboxValues) == 0) {
             $this->alert('warning', 'Anda Belum Memilih data');
+
             return;
         }
 
-        $this->emit('openModal', 'perusahaans.delete', [
-            'perusahaanIds' => $this->checkboxValues,
-            'perusahaanNames' => Perusahaan::query()->whereIn('id', $this->checkboxValues)->get('nama'),
+        $this->emit('openModal', 'lowongans.delete', [
+            'lowonganIds' => $this->checkboxValues,
+            'lowonganNames' => Lowongan::query()->whereIn('id', $this->checkboxValues)->get('job_title'),
             'confirmationTitle' => 'Hapus Data',
             'confirmationDescription' => 'Apakah anda yakin ingin menghapus data ini',
         ]);
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -135,11 +100,11 @@ final class PerusahaanTable extends PowerGridComponent
     /**
     * PowerGrid datasource.
     *
-    * @return Builder<\App\Models\Perusahaan>
+    * @return Builder<\App\Models\Lowongan>
     */
     public function datasource(): Builder
     {
-        return Perusahaan::query();
+        return Lowongan::query();
     }
 
     /*
@@ -175,31 +140,20 @@ final class PerusahaanTable extends PowerGridComponent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
-            ->addColumn('nama')
+            ->addColumn('job_title')
 
            /** Example of custom column using a closure **/
-            ->addColumn('nama_lower', function (Perusahaan $model) {
-                return strtolower(e($model->nama));
+            ->addColumn('job_title_lower', function (Lowongan $model) {
+                return strtolower(e($model->job_title));
             })
 
-            ->addColumn('bidang_usaha')
-            ->addColumn('no_telpon')
-            ->addColumn('fax')
-            ->addColumn('email')
-            ->addColumn('website')
-            ->addColumn('npwp')
-            ->addColumn('alamat')
-            ->addColumn('rt')
-            ->addColumn('rw')
-            ->addColumn('nama_dusun')
-            ->addColumn('kelurahan')
-            ->addColumn('kecamatan')
-            ->addColumn('kabupaten')
-            ->addColumn('kode_pos')
-            ->addColumn('lintang')
-            ->addColumn('bujur')
-            ->addColumn('created_at_formatted', fn (Perusahaan $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->addColumn('updated_at_formatted', fn (Perusahaan $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->addColumn('job_description')
+            ->addColumn('job_location')
+            ->addColumn('job_salary')
+            ->addColumn('job_requirements')
+            ->addColumn('job_contact')
+            ->addColumn('created_at_formatted', fn (Lowongan $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+            ->addColumn('updated_at_formatted', fn (Lowongan $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
     }
 
     /*
@@ -219,107 +173,34 @@ final class PerusahaanTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            // Column::make('ID', 'id')
-            //     ->makeInputRange(),
+            Column::make('ID', 'id'),
+                // ->makeInputRange(),
 
-            Column::make('NAMA', 'nama')
+            Column::make('Judul Pekerjaan', 'job_title')
                 ->sortable()
-                ->editOnClick()
                 ->searchable(),
                 // ->makeInputText(),
 
-            Column::make('BIDANG USAHA', 'bidang_usaha')
+            Column::make('Deskripsi Pekerjaan', 'job_description')
+                ->sortable(),
+                // ->searchable(),
+
+            Column::make('Lokasi', 'job_location')
                 ->sortable()
-                ->editOnClick()
                 ->searchable(),
                 // ->makeInputText(),
 
-            Column::make('NO TELPON', 'no_telpon')
+            Column::make('Gaji', 'job_salary')
                 ->sortable()
-                ->editOnClick()
                 ->searchable(),
                 // ->makeInputText(),
 
-            Column::make('FAX', 'fax')
+            Column::make('Syarat', 'job_requirements')
                 ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('EMAIL', 'email')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('WEBSITE', 'website')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('NPWP', 'npwp')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('ALAMAT', 'alamat')
-                ->sortable()
-                ->editOnClick()
                 ->searchable(),
 
-            Column::make('RT', 'rt')
+            Column::make('Kontak', 'job_contact')
                 ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('RW', 'rw')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('NAMA DUSUN', 'nama_dusun')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('KELURAHAN', 'kelurahan')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('KECAMATAN', 'kecamatan')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('KABUPATEN', 'kabupaten')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('KODE POS', 'kode_pos')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('LINTANG', 'lintang')
-                ->sortable()
-                ->editOnClick()
-                ->searchable(),
-                // ->makeInputText(),
-
-            Column::make('BUJUR', 'bujur')
-                ->sortable()
-                ->editOnClick()
                 ->searchable(),
                 // ->makeInputText(),
 
@@ -333,8 +214,7 @@ final class PerusahaanTable extends PowerGridComponent
             //     ->sortable(),
                 // ->makeInputDatePicker(),
 
-        ]
-;
+        ];
     }
 
     public function actions(): array
@@ -346,26 +226,27 @@ final class PerusahaanTable extends PowerGridComponent
         $delete = ($theme == 'tailwind') ? 'bg-red-500 text-white px-3 py-2 m-1 rounded text-sm' : 'btn btn-danger';
 
         return [
-            // Button::make('edit', 'Edit')
-            //     ->openModal('perusahaans.update', [
-            //         'perusahaanId' => 'id',
-            //         'confirmationTitle' => 'Update Data',
-            //     ])
-            //     ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
+            Button::make('edit', 'Edit')
+                ->openModal('lowongans.update', [
+                    'lowonganId' => 'id',
+                    'confirmationTitle' => 'Update Data',
+                ])
+                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
 
             Button::add('destroy')
                 ->caption(__('Hapus'))
                 ->class('bg-red-500 text-white px-3 py-2 m-1 rounded text-sm')
-                ->openModal('perusahaans.delete', [
-                    'perusahaanId' => 'id',
-                    'perusahaanName' => 'nama',
+                ->openModal('lowongans.delete', [
+                    'lowonganId' => 'id',
+                    'lowonganName' => 'job_title',
                     'confirmationTitle' => 'Hapus Data',
                     'confirmationDescription' => 'Apakah Anda yakin ingin menghapus data ini?',
                 ]),
 
         ];
     }
+
     /*
     |--------------------------------------------------------------------------
     | Actions Method
@@ -375,7 +256,7 @@ final class PerusahaanTable extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Perusahaan Action Buttons.
+     * PowerGrid Lowongan Action Buttons.
      *
      * @return array<int, Button>
      */
@@ -386,11 +267,11 @@ final class PerusahaanTable extends PowerGridComponent
        return [
            Button::make('edit', 'Edit')
                ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('perusahaan.edit', ['perusahaan' => 'id']),
+               ->route('lowongan.edit', ['lowongan' => 'id']),
 
            Button::make('destroy', 'Delete')
                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('perusahaan.destroy', ['perusahaan' => 'id'])
+               ->route('lowongan.destroy', ['lowongan' => 'id'])
                ->method('delete')
         ];
     }
@@ -405,7 +286,7 @@ final class PerusahaanTable extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Perusahaan Action Rules.
+     * PowerGrid Lowongan Action Rules.
      *
      * @return array<int, RuleActions>
      */
@@ -417,11 +298,9 @@ final class PerusahaanTable extends PowerGridComponent
 
            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($perusahaan) => $perusahaan->id === 1)
+                ->when(fn($lowongan) => $lowongan->id === 1)
                 ->hide(),
         ];
     }
     */
-
-
 }

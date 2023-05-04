@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\LowonganController;
 use App\Http\Controllers\PerusahaanController;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\RuangController;
@@ -77,4 +78,5 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->
     Route::get('perusahaans', [PerusahaanController::class, 'index'])->name('perusahaans.index');
     Route::get('prestasis', [PrestasiController::class, 'index'])->name('prestasis.index');
     Route::get('ruangs', [RuangController::class, 'index'])->name('ruangs.index');
+    Route::get('lowongans', [LowonganController::class, 'index'])->name('lowongans.index');
 });

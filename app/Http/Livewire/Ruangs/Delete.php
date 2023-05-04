@@ -57,6 +57,7 @@ class Delete extends ModalComponent
             'pg:eventRefresh-default',
         ]);
     }
+
     public function render()
     {
         return view('livewire.ruangs.delete');
