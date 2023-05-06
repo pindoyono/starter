@@ -28,12 +28,10 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-// Route::view('/', 'dashboard')->name('home');
-// Route::get('/', function () {
-//     return redirect('/login');
-// })->name('home');
-
 // Route::view('/', 'welcome')->name('home');
+Route::get('users1111', [UserController::class, 'index11'])->name('users111.index');
+
+Route::view('/', 'welcome')->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)
@@ -60,8 +58,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::view('/', 'welcome')->name('home');
-
     // coba dengan controller
     Route::get('users', [UserController::class, 'index'])->name('users.index');
 
@@ -73,13 +69,8 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
-    Route::view('/', 'dashboard')->name('home');
-    // return view('welcome');
-})->name('home');
-
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin_index');
+    Route::get('/', [AdminController::class, 'index'])->name('home');
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('sekolahs', [SekolahController::class, 'index'])->name('sekolahs.index');
