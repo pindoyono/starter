@@ -78,8 +78,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('index');
+Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin_index');
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('sekolahs', [SekolahController::class, 'index'])->name('sekolahs.index');
