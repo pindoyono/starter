@@ -70,3 +70,7 @@ setMode2();
 
 // Event listeners
 window.addEventListener("resize", setMode2);
+
+// Initialization for ES Users
+import { Select, initTE } from "tw-elements";
+initTE({ Select });

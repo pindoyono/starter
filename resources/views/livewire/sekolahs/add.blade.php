@@ -104,6 +104,26 @@
                     </div>
                 </div>
 
+                @role('admin')
+                    <div class="sm:col-span-6">
+                        <label for="kabupaten" class="block text-sm font-medium text-gray-700">Kabupaten</label>
+                        <div class="">
+                            <select data-te-select-init data-te-select-filter="true">
+                                @foreach ($users as $user)
+                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
+                                @endforeach
+                            </select>
+                            <span class="text-red-500">
+                                @error('kabupaten')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                    </div>
+                @else
+                    jgj
+                @endrole
+
                 <div class="sm:col-span-3">
                     <label for="logo" class="block text-sm font-medium text-gray-700">logo</label>
                     <div class="mt-1">
@@ -133,3 +153,6 @@
         </button>
     </x-slot>
 </x-modal>
+
+
+<script></script>

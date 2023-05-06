@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Sekolah;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use PowerComponents\LivewirePowerGrid\Button;
@@ -50,6 +51,7 @@ final class SekolahTable extends PowerGridComponent
             Button::make('tambah', 'Tambah')
                 ->openModal('sekolahs.add', [
                     'confirmationTitle' => 'Tambah Sekolah',
+                    'users' => User::query()->orderBy('name', 'asc')->get(),
                 ])
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
