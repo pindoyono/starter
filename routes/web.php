@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 //     return redirect('/login');
 // })->name('home');
 
-Route::view('/', 'welcome')->name('home');
+// Route::view('/', 'welcome')->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)
