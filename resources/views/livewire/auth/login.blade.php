@@ -2,11 +2,9 @@
 
 <div>
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        {{-- <a href="{{ route('home') }}"> --}}
         {{-- <x-logo class="w-auto h-16 mx-auto text-indigo-600" /> --}}
         <img src="{{ asset('storage/logo_kaltara.svg') }}" class="w-10 mx-auto my-0" alt="" />
 
-        {{-- </a> --}}
 
         <h2 class="mt-6 text-3xl font-extrabold leading-9 text-center text-gray-900">
             SIVODUDI
