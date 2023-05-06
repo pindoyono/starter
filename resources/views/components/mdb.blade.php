@@ -15,26 +15,24 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet" />
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
-
+    @powerGridStyles
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
-
-<body class="dark:bg-zinc-800">
+<body class="bg-white dark:bg-gray-900">
     <!--Main Navigation-->
     <header>
-        <!-- Sidenav -->
+        {{-- sidenav --}}
         <x-side />
-        <!-- Sidenav -->
+        {{-- sidenav --}}
+
 
         <!-- Navbar -->
         <x-navbar />
-
         <!-- Navbar -->
     </header>
     <!--Main Navigation-->
@@ -52,12 +50,21 @@
             </div>
         </div>
     </main>
-    <!--Main layout-->
+
+    <x-footer />
+    <div class=" z-[1055]">
+        @livewire('livewire-ui-modal')
+    </div>
+    @powerGridScripts
     @livewireScripts
 
-    <!--Footer-->
-    <footer></footer>
-    <!--Footer-->
+    {{-- <script src="{{ asset('vendor/livewire-alert/livewire-alert.js') }}"></script> --}}
+    {{-- <x-livewire-alert::flash /> --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <x-livewire-alert::scripts />
+
+
 </body>
 
 </html>
