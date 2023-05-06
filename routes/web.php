@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     // Route::view('/dashboard', 'dashboard')->name('home');
     return view('welcome');
 })->name('home');
