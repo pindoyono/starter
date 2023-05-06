@@ -28,10 +28,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::view('/', 'dashboard')->name('home');
-Route::get('/', function () {
-    return redirect('/login');
-})->name('home');
+// Route::view('/', 'dashboard')->name('home');
+// Route::get('/', function () {
+//     return redirect('/login');
+// })->name('home');
+
+Route::view('/', 'welcome')->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)
@@ -57,6 +59,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::view('/', 'welcome')->name('home');
+
+    // coba dengan controller
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+
     Route::get('email/verify/{id}/{hash}', EmailVerificationController::class)
         ->middleware('signed')
         ->name('verification.verify');
