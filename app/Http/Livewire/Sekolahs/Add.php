@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Sekolahs;
 
 
-use App\Models\User;
 use App\Models\Sekolah;
 use Livewire\WithFileUploads;
 use LivewireUI\Modal\ModalComponent;
@@ -22,9 +21,6 @@ class Add extends ModalComponent
 
     use WithFileUploads;
     use LivewireAlert;
-
-    public array $users = [];
-    public array $role_user = [];
 
 
     public string $confirmationTitle = '';
@@ -64,7 +60,7 @@ class Add extends ModalComponent
     }
 
 
-    public function mount(User $user)
+    public function mount(Sekolah $sekolah)
     {
         $this->rules = $this->rules();
     }
@@ -102,8 +98,6 @@ class Add extends ModalComponent
         ]);
 
     }
-
-
 
     public function render()
     {

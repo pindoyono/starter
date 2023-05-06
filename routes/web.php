@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\LowonganController;
 use App\Http\Controllers\PerusahaanController;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\RuangController;
@@ -30,14 +31,6 @@ use Illuminate\Support\Facades\Route;
 // Route::view('/', 'dashboard')->name('home');
 Route::get('/', function () {
     return redirect('/login');
-    Route::get('/', [AdminController::class, 'index'])->name('index');
-
-    Route::get('users', [UserController::class, 'index'])->name('users.index');
-    Route::get('sekolahs', [SekolahController::class, 'index'])->name('sekolahs.index');
-    Route::get('perusahaans', [PerusahaanController::class, 'index'])->name('perusahaans.index');
-    Route::get('prestasis', [PrestasiController::class, 'index'])->name('prestasis.index');
-    Route::get('ruangs', [RuangController::class, 'index'])->name('ruangs.index');
-    Route::get('lowongans', [LowonganController::class, 'index'])->name('lowongans.index');
 });
 
 Route::middleware('guest')->group(function () {
@@ -74,7 +67,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     // Route::view('/dashboard', 'dashboard')->name('home');
-    return view('welcome');
+    return view('dashboard');
 })->name('home');
 
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -85,4 +78,5 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->
     Route::get('perusahaans', [PerusahaanController::class, 'index'])->name('perusahaans.index');
     Route::get('prestasis', [PrestasiController::class, 'index'])->name('prestasis.index');
     Route::get('ruangs', [RuangController::class, 'index'])->name('ruangs.index');
+    Route::get('lowongans', [LowonganController::class, 'index'])->name('lowongans.index');
 });

@@ -37,7 +37,6 @@ class Update extends ModalComponent
             'no_hp' => 'required',
             'provinsi' => 'required',
             'kabupaten' => 'required',
-            // 'user_id' => 'required',
             // 'logo' => 'required|image|mimes:jpg,bmp,png|max:5120',
         ];
     }

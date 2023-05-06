@@ -2,25 +2,16 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Sekolah;
+use App\Models\Lowongan;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use PowerComponents\LivewirePowerGrid\Button;
-use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Exportable;
-use PowerComponents\LivewirePowerGrid\Footer;
-use PowerComponents\LivewirePowerGrid\Header;
-use PowerComponents\LivewirePowerGrid\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\PowerGridEloquent;
-use PowerComponents\LivewirePowerGrid\Rules\Rule;
-use PowerComponents\LivewirePowerGrid\Rules\RuleActions;
+use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
+use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-final class SekolahTable extends PowerGridComponent
+final class LowonganTable extends PowerGridComponent
 {
     use ActionButton;
-    use LivewireAlert;
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +19,7 @@ final class SekolahTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Setup Table's general features
     |
-     */
+    */
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -48,8 +39,8 @@ final class SekolahTable extends PowerGridComponent
     {
         return [
             Button::make('tambah', 'Tambah')
-                ->openModal('sekolahs.add', [
-                    'confirmationTitle' => 'Tambah Sekolah',
+                ->openModal('lowongans.add', [
+                    'confirmationTitle' => 'Tambah Data',
                 ])
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
@@ -90,10 +81,9 @@ final class SekolahTable extends PowerGridComponent
             return;
         }
 
-        $this->emit('openModal', 'sekolahs.delete', [
-            'SekolahIds' => $this->checkboxValues,
-            'SekolahNames' => Sekolah::query()->whereIn('id', $this->checkboxValues)->get('nama'),
-            'SekolahLogos' => Sekolah::query()->whereIn('id', $this->checkboxValues)->get('logo'),
+        $this->emit('openModal', 'lowongans.delete', [
+            'lowonganIds' => $this->checkboxValues,
+            'lowonganNames' => Lowongan::query()->whereIn('id', $this->checkboxValues)->get('job_title'),
             'confirmationTitle' => 'Hapus Data',
             'confirmationDescription' => 'Apakah anda yakin ingin menghapus data ini',
         ]);
@@ -105,16 +95,16 @@ final class SekolahTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Provides data to your Table using a Model or Collection
     |
-     */
+    */
 
     /**
-     * PowerGrid datasource.
-     *
-     * @return Builder<\App\Models\Sekolah>
-     */
+    * PowerGrid datasource.
+    *
+    * @return Builder<\App\Models\Lowongan>
+    */
     public function datasource(): Builder
     {
-        return Sekolah::query();
+        return Lowongan::query();
     }
 
     /*
@@ -123,7 +113,7 @@ final class SekolahTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Configure here relationships to be used by the Search and Table Filters.
     |
-     */
+    */
 
     /**
      * Relationship search.
@@ -145,30 +135,25 @@ final class SekolahTable extends PowerGridComponent
     | ❗ IMPORTANT: When using closures, you must escape any value coming from
     |    the database using the `e()` Laravel Helper function.
     |
-     */
+    */
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
-            ->addColumn('logo', function (Sekolah $model) {
-                return '
-                <img  src="' . asset('storage/' . e($model->logo)) . '"  class="h-10 max-w-sm transition-shadow duration-300 ease-in-out rounded-lg shadow-none hover:shadow-lg hover:shadow-black/30" alt="" />';
-            })
-            ->addColumn('nama')
+            ->addColumn('job_title')
 
-        /** Example of custom column using a closure **/
-            ->addColumn('nama_lower', function (Sekolah $model) {
-                return strtolower(e($model->nama));
+           /** Example of custom column using a closure **/
+            ->addColumn('job_title_lower', function (Lowongan $model) {
+                return strtolower(e($model->job_title));
             })
 
-            ->addColumn('alamat')
-            ->addColumn('tipe')
-            ->addColumn('kurikulum')
-            ->addColumn('no_hp')
-            ->addColumn('provinsi')
-            ->addColumn('kabupaten');
-        // ->addColumn('created_at_formatted', fn (Sekolah $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-        // ->addColumn('updated_at_formatted', fn (Sekolah $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->addColumn('job_description')
+            ->addColumn('job_location')
+            ->addColumn('job_salary')
+            ->addColumn('job_requirements')
+            ->addColumn('job_contact')
+            ->addColumn('created_at_formatted', fn (Lowongan $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+            ->addColumn('updated_at_formatted', fn (Lowongan $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
     }
 
     /*
@@ -178,9 +163,9 @@ final class SekolahTable extends PowerGridComponent
     | Include the columns added columns, making them visible on the Table.
     | Each column can be configured with properties, filters, actions...
     |
-     */
+    */
 
-    /**
+     /**
      * PowerGrid Columns.
      *
      * @return array<int, Column>
@@ -188,75 +173,49 @@ final class SekolahTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            // Column::make('ID', 'id')
-            // ->makeInputRange(),
+            Column::make('ID', 'id'),
+                // ->makeInputRange(),
 
-            Column::make('LOGO', 'logo'),
-            // ->sortable()
-            // ->searchable(),
-
-            Column::make('NAMA', 'nama')
-                ->sortable()
-                ->searchable()
-                ->makeInputText(),
-
-            Column::make('ALAMAT', 'alamat')
+            Column::make('Judul Pekerjaan', 'job_title')
                 ->sortable()
                 ->searchable(),
-            // ->makeInputText(),
+                // ->makeInputText(),
 
-            Column::make('TIPE', 'tipe')
-                ->sortable()
-                ->searchable()
-                ->makeInputText(),
+            Column::make('Deskripsi Pekerjaan', 'job_description')
+                ->sortable(),
+                // ->searchable(),
 
-            Column::make('KURIKULUM', 'kurikulum')
-                ->sortable()
-                ->searchable()
-                ->makeInputText(),
-
-            Column::make('NO HP', 'no_hp')
+            Column::make('Lokasi', 'job_location')
                 ->sortable()
                 ->searchable(),
-            // ->makeInputText(),
+                // ->makeInputText(),
 
-            Column::make('PROVINSI', 'provinsi')
+            Column::make('Gaji', 'job_salary')
                 ->sortable()
                 ->searchable(),
-            // ->makeInputText(),
+                // ->makeInputText(),
 
-            Column::make('KABUPATEN', 'kabupaten')
+            Column::make('Syarat', 'job_requirements')
                 ->sortable()
-                ->searchable()
-                ->makeInputText(),
+                ->searchable(),
+
+            Column::make('Kontak', 'job_contact')
+                ->sortable()
+                ->searchable(),
+                // ->makeInputText(),
 
             // Column::make('CREATED AT', 'created_at_formatted', 'created_at')
             //     ->searchable()
             //     ->sortable(),
-            // ->makeInputDatePicker(),
+                // ->makeInputDatePicker(),
 
             // Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
             //     ->searchable()
             //     ->sortable(),
-            // ->makeInputDatePicker(),
+                // ->makeInputDatePicker(),
 
-        ]
-        ;
+        ];
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Actions Method
-    |--------------------------------------------------------------------------
-    | Enable the method below only if the Routes below are defined in your app.
-    |
-     */
-
-    /**
-     * PowerGrid Sekolah Action Buttons.
-     *
-     * @return array<int, Button>
-     */
 
     public function actions(): array
     {
@@ -268,21 +227,21 @@ final class SekolahTable extends PowerGridComponent
 
         return [
             Button::make('edit', 'Edit')
-                ->openModal('sekolahs.update', [
-                    'sekolahId' => 'id',
-                    'confirmationTitle' => 'Update User',
+                ->openModal('lowongans.update', [
+                    'lowonganId' => 'id',
+                    'confirmationTitle' => 'Update Data',
                 ])
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
 
             Button::add('destroy')
-                ->caption(__('Delete'))
+                ->caption(__('Hapus'))
                 ->class('bg-red-500 text-white px-3 py-2 m-1 rounded text-sm')
-                ->openModal('sekolahs.delete', [
-                    'SekolahId' => 'id',
-                    'SekolahName' => 'nama',
+                ->openModal('lowongans.delete', [
+                    'lowonganId' => 'id',
+                    'lowonganName' => 'job_title',
                     'confirmationTitle' => 'Hapus Data',
-                    'confirmationDescription' => 'Apakah Anda yakin inginmenghapus data ini?',
+                    'confirmationDescription' => 'Apakah Anda yakin ingin menghapus data ini?',
                 ]),
 
         ];
@@ -290,28 +249,58 @@ final class SekolahTable extends PowerGridComponent
 
     /*
     |--------------------------------------------------------------------------
+    | Actions Method
+    |--------------------------------------------------------------------------
+    | Enable the method below only if the Routes below are defined in your app.
+    |
+    */
+
+     /**
+     * PowerGrid Lowongan Action Buttons.
+     *
+     * @return array<int, Button>
+     */
+
+    /*
+    public function actions(): array
+    {
+       return [
+           Button::make('edit', 'Edit')
+               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+               ->route('lowongan.edit', ['lowongan' => 'id']),
+
+           Button::make('destroy', 'Delete')
+               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+               ->route('lowongan.destroy', ['lowongan' => 'id'])
+               ->method('delete')
+        ];
+    }
+    */
+
+    /*
+    |--------------------------------------------------------------------------
     | Actions Rules
     |--------------------------------------------------------------------------
     | Enable the method below to configure Rules for your Table and Action Buttons.
     |
-     */
+    */
 
-    /**
-     * PowerGrid Sekolah Action Rules.
+     /**
+     * PowerGrid Lowongan Action Rules.
      *
      * @return array<int, RuleActions>
      */
 
     /*
-public function actionRules(): array
-{
-return [
+    public function actionRules(): array
+    {
+       return [
 
-//Hide button edit for ID 1
-Rule::button('edit')
-->when(fn($sekolah) => $sekolah->id === 1)
-->hide(),
-];
-}
- */
+           //Hide button edit for ID 1
+            Rule::button('edit')
+                ->when(fn($lowongan) => $lowongan->id === 1)
+                ->hide(),
+        ];
+    }
+    */
 }

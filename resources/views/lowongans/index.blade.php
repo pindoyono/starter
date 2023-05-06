@@ -1,9 +1,9 @@
 <x-mdb>
     <div class="flex flex-col w-full px-3">
         <h3 class="">
-            Data Sekolah
+            Data Lowongan
         </h3>
         <hr>
-        <livewire:sekolah-table />
+        <livewire:lowongan-table />
     </div>
 </x-mdb>
