@@ -112,6 +112,7 @@ final class PerusahaanTable extends PowerGridComponent
     {
         if (count($this->checkboxValues) == 0) {
             $this->alert('warning', 'Anda Belum Memilih data');
+
             return;
         }
 
