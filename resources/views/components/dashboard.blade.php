@@ -1,3 +1,3 @@
-Data Dasboard yg akan di tampilkan
+Data Dasboard
 
-<button onclick="Livewire.emit('openModal', 'hello-world')">Open Modal</button>
+{{-- <button onclick="Livewire.emit('openModal', 'hello-world')">Open Modal</button> --}}

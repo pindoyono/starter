@@ -79,7 +79,7 @@
 
 
                 <div class="sm:col-span-12">
-                    <label for="job_requirements" class="block text-sm font-medium text-gray-700">Kontak *</label>
+                    <label for="job_requirements" class="block text-sm font-medium text-gray-700">Persyaratan *</label>
                     <div class="mt-1">
                         <textarea wire:model.defer="job_requirements" class="w-full " id="exampleFormControlTextarea1" rows="3"
                             placeholder=""></textarea>
