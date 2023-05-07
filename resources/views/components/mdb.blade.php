@@ -55,7 +55,7 @@
     <div class=" z-[1055]">
         @livewire('livewire-ui-modal')
     </div>
-    @powerGridScripts
+    {{-- @powerGridScripts --}}
     @livewireScripts
 
     {{-- <script src="{{ asset('vendor/livewire-alert/livewire-alert.js') }}"></script> --}}
