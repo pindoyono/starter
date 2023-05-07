@@ -85,7 +85,7 @@
             <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                     <div class="relative flex-1 flex-grow w-full max-w-full pr-4">
-                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Bursa Kerja Khusus</h5>
+                        <h5 class="text-xs font-bold uppercase text-blueGray-400">BKK</h5>
                         <span class="text-xl font-semibold text-blueGray-700">100 </span>
                     </div>
                     <div class="relative flex-initial w-auto pl-4">
