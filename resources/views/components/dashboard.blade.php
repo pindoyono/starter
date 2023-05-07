@@ -26,8 +26,8 @@
                     </div>
                 </div>
                 <p class="mt-4 text-sm text-blueGray-400">
-                    <span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up"></i> 100 </span>
-                    <span class="whitespace-nowrap"> Ruang Praktik </span>
+                    <span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up"></i> 50% </span>
+                    <span class="whitespace-nowrap"> Kalimantan Utara </span>
                 </p>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                     <div class="relative flex-1 flex-grow w-full max-w-full pr-4">
-                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Pengguna</h5>
+                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Ruang Praktik</h5>
                         </h5>
                         <span class="text-xl font-semibold text-blueGray-700">100</span>
                     </div>
@@ -50,8 +50,8 @@
                     </div>
                 </div>
                 <p class="mt-4 text-sm text-blueGray-400">
-                    <span class="mr-2 text-red-500"><i class="fas fa-arrow-down"></i> 100</span>
-                    <span class="whitespace-nowrap"> Bursa Kerja Khusus </span>
+                    <span class="mr-2 text-red-500"><i class="fas fa-arrow-down"></i> 50%</span>
+                    <span class="whitespace-nowrap"> Kalimantan Utara </span>
                 </p>
             </div>
         </div>
@@ -62,8 +62,8 @@
             <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                     <div class="relative flex-1 flex-grow w-full max-w-full pr-4">
-                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Sales</h5>
-                        <span class="text-xl font-semibold text-blueGray-700">901</span>
+                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Pengguna</h5>
+                        <span class="text-xl font-semibold text-blueGray-700">100</span>
                     </div>
                     <div class="relative flex-initial w-auto pl-4">
                         <div
@@ -73,8 +73,8 @@
                     </div>
                 </div>
                 <p class="mt-4 text-sm text-blueGray-400">
-                    <span class="mr-2 text-red-500"><i class="fas fa-arrow-down"></i> 1,25% </span>
-                    <span class="whitespace-nowrap"> Since yesterday </span>
+                    <span class="mr-2 text-red-500"><i class="fas fa-arrow-down"></i> 50% </span>
+                    <span class="whitespace-nowrap"> Kalimantan Utara</span>
                 </p>
             </div>
         </div>
@@ -85,8 +85,8 @@
             <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                     <div class="relative flex-1 flex-grow w-full max-w-full pr-4">
-                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Performance</h5>
-                        <span class="text-xl font-semibold text-blueGray-700">51.02% </span>
+                        <h5 class="text-xs font-bold uppercase text-blueGray-400">Bursa Kerja Khusus</h5>
+                        <span class="text-xl font-semibold text-blueGray-700">100 </span>
                     </div>
                     <div class="relative flex-initial w-auto pl-4">
                         <div
@@ -96,8 +96,8 @@
                     </div>
                 </div>
                 <p class="mt-4 text-sm text-blueGray-400">
-                    <span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up"></i> 12% </span>
-                    <span class="whitespace-nowrap"> Since last mounth </span>
+                    <span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up"></i> 50% </span>
+                    <span class="whitespace-nowrap"> Kalimantan Utara </span>
                 </p>
             </div>
         </div>
