@@ -25,5 +25,6 @@ class Ruang extends Model
         'apd2',
         'apd3',
         'keterangan',
+        'user_id',
     ];
 }

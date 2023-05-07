@@ -107,7 +107,8 @@
                 <div class="sm:col-span-3">
                     <label for="logo" class="block text-sm font-medium text-gray-700">logo</label>
                     <div class="mt-1">
-                        <input type="file" wire:model.defer="logo" id="logo" autocomplete="logo"
+                        <input type="file" name="logo" wire:model.defer="logo" id="logo"
+                            autocomplete="logo"
                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <span class="text-red-500">
                             @error('logo')

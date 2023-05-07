@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\Prestasis;
 
 use App\Models\Prestasi;
-use Livewire\WithFileUploads;
-use LivewireUI\Modal\ModalComponent;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use LivewireUI\Modal\ModalComponent;
+use Livewire\WithFileUploads;
 
 class Update extends ModalComponent
 {
@@ -18,19 +18,18 @@ class Update extends ModalComponent
     use WithFileUploads;
     use LivewireAlert;
 
-
     public string $confirmationTitle = '';
 
     public function rules()
     {
-         return [
+        return [
             // 'prestasi' => 'required',
             'berkas' => 'required',
             // 'logo' => 'required|image|mimes:jpg,bmp,png|max:5120',
         ];
     }
 
-    public static function modalMaxWidth(): string
+    public static function modalMaxWidth() : string
     {
         return '4xl';
     }
@@ -50,13 +49,11 @@ class Update extends ModalComponent
         $this->closeModal();
     }
 
-
     public function mount(Prestasi $prestasi)
     {
         $data = Prestasi::findOrFail($this->prestasiId);
         $this->prestasi = $data->prestasi;
         $this->keterangan = $data->keterangan;
-        $this->berkas = $data->berkas;
         $this->preview_berkas = $data->berkas;
 
         $this->rules = $this->rules();
@@ -74,38 +71,42 @@ class Update extends ModalComponent
             $this->validate();
             $data = Prestasi::find($this->prestasiId);
 
-
             // 'logo' => 'logo_sekolah/'.date('Ymd').'.'.$this->logo->extension(),
             // 'berkas' => 'berkas_prestasi/'.time().'_'.$this->prestasi.'.'.$this->berkas->extension(),
             // dd($data->berkas);
 
-                if(Storage::exists('public/'.$data->berkas)){
-                    Storage::delete('public/'.$data->berkas);
+            // dd($this->berkas);
+            if ($this->berkas) {
+
+                if (Storage::exists('public/' . $data->berkas)) {
+                    Storage::delete('public/' . $data->berkas);
                     /*
-                        Delete Multiple files this way
-                        Storage::delete(['upload/test.png', 'upload/test2.png']);
-                    */
-                }else{
+                Delete Multiple files this way
+                Storage::delete(['upload/test.png', 'upload/test2.png']);
+                 */
+                } else {
                     $this->alert('error', 'File does not exist');
                 }
 
-                $this->berkas->storeAs('public/berkas_prestasi/', time().'_'.$this->prestasi.'.'.$this->berkas->extension());
-                $data->berkas = 'berkas_prestasi/'.time().'_'.$this->prestasi.'.'.$this->berkas->extension();
+                $this->berkas->storeAs('public/berkas_prestasi/', time() . '_' . $this->prestasi . '.' . $this->berkas->extension());
+                $data->berkas = 'berkas_prestasi/' . time() . '_' . $this->prestasi . '.' . $this->berkas->extension();
 
+                $data->save();
+                $this->closeModal();
+                $this->alert('success', 'Berhasil Update Data');
+            } else {
+                $this->closeModal();
+                $this->alert('error', 'Gagal Update Data');
+            }
 
-            $data->save();
-
-            $this->closeModal();
-            $this->alert('success', 'Berhasil Update Data');
             $this->closeModalWithEvents([
                 'pg:eventRefresh-default',
             ]);
-        }  catch (QueryException $exception) {
+        } catch (QueryException $exception) {
             //throw $th;
-            $this->alert('warning', 'Gagal Update Data'.$exception);
+            $this->alert('warning', 'Gagal Update Data' . $exception);
         }
     }
-
 
     public function render()
     {

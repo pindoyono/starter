@@ -105,6 +105,27 @@
                     </div>
                 </div>
 
+                @role('admin')
+                    <div class="sm:col-span-3">
+                        <label for="user_id" class="block text-sm font-medium text-gray-700">Pengguna</label>
+                        <div class="mt-1">
+                            <select wire:model.defer="user_id" id="user_id" data-te-select-init>
+                                <option value="1">Hungungkan Pengguna</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
+                                @endforeach
+                            </select>
+                            <span class="text-red-500">
+                                @error('kabupaten')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                    </div>
+                @else
+                @endrole
+
+
                 <div class="sm:col-span-3">
                     <label for="logo" class="block text-sm font-medium text-gray-700">logo</label>
                     <div class="mt-1">

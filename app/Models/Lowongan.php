@@ -16,6 +16,7 @@ class Lowongan extends Model
         'job_salary',
         'job_requirements',
         'job_contact',
+        'user_id',
     ];
 
 }

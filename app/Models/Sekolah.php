@@ -18,5 +18,6 @@ class Sekolah extends Model
         'provinsi',
         'kabupaten',
         'logo',
+        'user_id',
     ];
 }

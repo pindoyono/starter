@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Ruangs;
 
-use App\Models\Ruang;
-use Livewire\Component;
 use App\Models\Perusahaan;
-use LivewireUI\Modal\ModalComponent;
+use App\Models\Ruang;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use LivewireUI\Modal\ModalComponent;
 
 class Add extends ModalComponent
 {
@@ -30,11 +30,9 @@ class Add extends ModalComponent
     public $apd3;
     public $keterangan;
 
-
-
     public function rules()
     {
-         return [
+        return [
             'nama_ruang' => 'required',
             'jumlah_siswa' => 'required|numeric',
             'panjang' => 'required|numeric',
@@ -63,7 +61,6 @@ class Add extends ModalComponent
         $this->closeModal();
     }
 
-
     public function mount(Perusahaan $sekolah)
     {
         $this->rules = $this->rules();
@@ -91,14 +88,15 @@ class Add extends ModalComponent
                 'apd2' => $this->apd2,
                 'apd3' => $this->apd3,
                 'keterangan' => $this->keterangan,
+                'user_id' => Auth::user()->id,
+
             ];
             $data = Ruang::create($data);
             $this->closeModal();
-        }  catch (QueryException $exception) {
+        } catch (QueryException $exception) {
             //throw $th;
-            $this->alert('warning', 'Gagal Tambah Data'.$exception);
+            $this->alert('warning', 'Gagal Tambah Data' . $exception);
         }
-
 
         $this->closeModalWithEvents([
             'pg:eventRefresh-default',

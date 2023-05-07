@@ -3,16 +3,24 @@
 namespace App\Http\Livewire;
 
 use App\Models\Perusahaan;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
-use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
-use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use PowerComponents\LivewirePowerGrid\Button;
+use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Exportable;
+use PowerComponents\LivewirePowerGrid\Footer;
+use PowerComponents\LivewirePowerGrid\Header;
+use PowerComponents\LivewirePowerGrid\PowerGrid;
+use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\PowerGridEloquent;
+use PowerComponents\LivewirePowerGrid\Rules\Rule;
+use PowerComponents\LivewirePowerGrid\Rules\RuleActions;use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 
 final class PerusahaanTable extends PowerGridComponent
 {
     use ActionButton;
-    public  $nama = null;
+    public $nama = null;
     public $bidang_usaha = null;
     public $no_telpon = null;
     public $fax = null;
@@ -53,7 +61,7 @@ final class PerusahaanTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Setup Table's general features
     |
-    */
+     */
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -86,8 +94,7 @@ final class PerusahaanTable extends PowerGridComponent
         ];
     }
 
-
-     /*
+    /*
     |--------------------------------------------------------------------------
     |  Event listeners
     |--------------------------------------------------------------------------
@@ -103,7 +110,7 @@ final class PerusahaanTable extends PowerGridComponent
             ]);
     }
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     |  Bulk delete button
     |--------------------------------------------------------------------------
@@ -123,23 +130,27 @@ final class PerusahaanTable extends PowerGridComponent
         ]);
     }
 
-
     /*
     |--------------------------------------------------------------------------
     |  Datasource
     |--------------------------------------------------------------------------
     | Provides data to your Table using a Model or Collection
     |
-    */
+     */
 
     /**
-    * PowerGrid datasource.
-    *
-    * @return Builder<\App\Models\Perusahaan>
-    */
+     * PowerGrid datasource.
+     *
+     * @return Builder<\App\Models\Perusahaan>
+     */
     public function datasource(): Builder
     {
-        return Perusahaan::query();
+        // return Perusahaan::query();
+        if (Auth::user()->hasRole('admin')) {
+            return Perusahaan::query();
+        } else {
+            return Perusahaan::query()->where('user_id', Auth::user()->id);
+        }
     }
 
     /*
@@ -148,7 +159,7 @@ final class PerusahaanTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Configure here relationships to be used by the Search and Table Filters.
     |
-    */
+     */
 
     /**
      * Relationship search.
@@ -170,14 +181,14 @@ final class PerusahaanTable extends PowerGridComponent
     | ❗ IMPORTANT: When using closures, you must escape any value coming from
     |    the database using the `e()` Laravel Helper function.
     |
-    */
+     */
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
             ->addColumn('nama')
 
-           /** Example of custom column using a closure **/
+        /** Example of custom column using a closure **/
             ->addColumn('nama_lower', function (Perusahaan $model) {
                 return strtolower(e($model->nama));
             })
@@ -198,8 +209,8 @@ final class PerusahaanTable extends PowerGridComponent
             ->addColumn('kode_pos')
             ->addColumn('lintang')
             ->addColumn('bujur')
-            ->addColumn('created_at_formatted', fn (Perusahaan $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->addColumn('updated_at_formatted', fn (Perusahaan $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->addColumn('created_at_formatted', fn(Perusahaan $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+            ->addColumn('updated_at_formatted', fn(Perusahaan $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
     }
 
     /*
@@ -209,9 +220,9 @@ final class PerusahaanTable extends PowerGridComponent
     | Include the columns added columns, making them visible on the Table.
     | Each column can be configured with properties, filters, actions...
     |
-    */
+     */
 
-     /**
+    /**
      * PowerGrid Columns.
      *
      * @return array<int, Column>
@@ -226,43 +237,43 @@ final class PerusahaanTable extends PowerGridComponent
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('BIDANG USAHA', 'bidang_usaha')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('NO TELPON', 'no_telpon')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('FAX', 'fax')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('EMAIL', 'email')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('WEBSITE', 'website')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('NPWP', 'npwp')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('ALAMAT', 'alamat')
                 ->sortable()
@@ -273,68 +284,68 @@ final class PerusahaanTable extends PowerGridComponent
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('RW', 'rw')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('NAMA DUSUN', 'nama_dusun')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('KELURAHAN', 'kelurahan')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('KECAMATAN', 'kecamatan')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('KABUPATEN', 'kabupaten')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('KODE POS', 'kode_pos')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('LINTANG', 'lintang')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             Column::make('BUJUR', 'bujur')
                 ->sortable()
                 ->editOnClick()
                 ->searchable(),
-                // ->makeInputText(),
+            // ->makeInputText(),
 
             // Column::make('CREATED AT', 'created_at_formatted', 'created_at')
             //     ->searchable()
             //     ->sortable(),
-                // ->makeInputDatePicker(),
+            // ->makeInputDatePicker(),
 
             // Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
             //     ->searchable()
             //     ->sortable(),
-                // ->makeInputDatePicker(),
+            // ->makeInputDatePicker(),
 
         ]
-;
+        ;
     }
 
     public function actions(): array
@@ -372,9 +383,9 @@ final class PerusahaanTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Enable the method below only if the Routes below are defined in your app.
     |
-    */
+     */
 
-     /**
+    /**
      * PowerGrid Perusahaan Action Buttons.
      *
      * @return array<int, Button>
@@ -383,18 +394,18 @@ final class PerusahaanTable extends PowerGridComponent
     /*
     public function actions(): array
     {
-       return [
-           Button::make('edit', 'Edit')
-               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('perusahaan.edit', ['perusahaan' => 'id']),
+    return [
+    Button::make('edit', 'Edit')
+    ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+    ->route('perusahaan.edit', ['perusahaan' => 'id']),
 
-           Button::make('destroy', 'Delete')
-               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('perusahaan.destroy', ['perusahaan' => 'id'])
-               ->method('delete')
-        ];
+    Button::make('destroy', 'Delete')
+    ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+    ->route('perusahaan.destroy', ['perusahaan' => 'id'])
+    ->method('delete')
+    ];
     }
-    */
+     */
 
     /*
     |--------------------------------------------------------------------------
@@ -402,26 +413,25 @@ final class PerusahaanTable extends PowerGridComponent
     |--------------------------------------------------------------------------
     | Enable the method below to configure Rules for your Table and Action Buttons.
     |
-    */
+     */
 
-     /**
+    /**
      * PowerGrid Perusahaan Action Rules.
      *
      * @return array<int, RuleActions>
      */
 
     /*
-    public function actionRules(): array
-    {
-       return [
+public function actionRules(): array
+{
+return [
 
-           //Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($perusahaan) => $perusahaan->id === 1)
-                ->hide(),
-        ];
-    }
-    */
-
+//Hide button edit for ID 1
+Rule::button('edit')
+->when(fn($perusahaan) => $perusahaan->id === 1)
+->hide(),
+];
+}
+ */
 
 }

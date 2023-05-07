@@ -3,11 +3,12 @@
 namespace App\Http\Livewire\Sekolahs;
 
 use App\Models\Sekolah;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Livewire\WithFileUploads;
-use LivewireUI\Modal\ModalComponent;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use LivewireUI\Modal\ModalComponent;
+use Livewire\WithFileUploads;
 
 class Update extends ModalComponent
 {
@@ -19,17 +20,18 @@ class Update extends ModalComponent
     public $provinsi;
     public $kabupaten;
     public $logo;
+    public $user_id;
+    public array $users = [];
     public ?int $sekolahId = null;
 
     use WithFileUploads;
     use LivewireAlert;
 
-
     public string $confirmationTitle = '';
 
     public function rules()
     {
-         return [
+        return [
             'nama' => 'required',
             'alamat' => 'required',
             'tipe' => 'required',
@@ -41,7 +43,7 @@ class Update extends ModalComponent
         ];
     }
 
-    public static function modalMaxWidth(): string
+    public static function modalMaxWidth() : string
     {
         return '2xl';
     }
@@ -61,8 +63,7 @@ class Update extends ModalComponent
         $this->closeModal();
     }
 
-
-    public function mount(Sekolah $sekolah)
+    public function mount(User $users)
     {
         $data = Sekolah::findOrFail($this->sekolahId);
         $this->nama = $data->nama;
@@ -73,6 +74,7 @@ class Update extends ModalComponent
         $this->provinsi = $data->provinsi;
         $this->kabupaten = $data->kabupaten;
         $this->preview_logo = $data->logo;
+        $this->user_id = $data->user_id;
 
         $this->rules = $this->rules();
     }
@@ -95,22 +97,22 @@ class Update extends ModalComponent
             $data->no_hp = $this->no_hp;
             $data->provinsi = $this->provinsi;
             $data->kabupaten = $this->kabupaten;
+            $data->user_id = $this->user_id;
 
             // 'logo' => 'logo_sekolah/'.date('Ymd').'.'.$this->logo->extension(),
 
-
-            if ($data->logo) {
-                if(Storage::exists('public/'.$data->logo)){
-                    Storage::delete('public/'.$data->logo);
+            if ($this->logo) {
+                if (Storage::exists('public/' . $this->logo)) {
+                    Storage::delete('public/' . $this->logo);
                     /*
-                        Delete Multiple files this way
-                        Storage::delete(['upload/test.png', 'upload/test2.png']);
-                    */
-                }else{
+                Delete Multiple files this way
+                Storage::delete(['upload/test.png', 'upload/test2.png']);
+                 */
+                } else {
                     $this->alert('error', 'File does not exist');
                 }
-                $this->logo->storeAs('public/logo_sekolah/', time().'.'.$this->logo->extension());
-                $data->logo = 'logo_sekolah/'.time().'.'.$this->logo->extension();
+                $this->logo->storeAs('public/logo_sekolah/', time() . '.' . $this->logo->extension());
+                $data->logo = 'logo_sekolah/' . time() . '.' . $this->logo->extension();
 
             }
 
@@ -121,11 +123,10 @@ class Update extends ModalComponent
             $this->closeModalWithEvents([
                 'pg:eventRefresh-default',
             ]);
-        }  catch (QueryException $exception) {
+        } catch (QueryException $exception) {
             //throw $th;
-            $this->alert('warning', 'Gagal Update Data'.$exception);
+            $this->alert('warning', 'Gagal Update Data' . $exception);
         }
-
 
         $this->closeModalWithEvents([
             'pg:eventRefresh-default',

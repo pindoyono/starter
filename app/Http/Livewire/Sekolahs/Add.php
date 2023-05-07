@@ -2,11 +2,10 @@
 
 namespace App\Http\Livewire\Sekolahs;
 
-
 use App\Models\Sekolah;
-use Livewire\WithFileUploads;
-use LivewireUI\Modal\ModalComponent;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use LivewireUI\Modal\ModalComponent;
+use Livewire\WithFileUploads;
 
 class Add extends ModalComponent
 {
@@ -22,12 +21,11 @@ class Add extends ModalComponent
     use WithFileUploads;
     use LivewireAlert;
 
-
     public string $confirmationTitle = '';
 
     public function rules()
     {
-         return [
+        return [
             'nama' => 'required',
             'alamat' => 'required',
             'tipe' => 'required',
@@ -59,7 +57,6 @@ class Add extends ModalComponent
         $this->closeModal();
     }
 
-
     public function mount(Sekolah $sekolah)
     {
         $this->rules = $this->rules();
@@ -78,20 +75,19 @@ class Add extends ModalComponent
                 'no_hp' => $this->no_hp,
                 'provinsi' => $this->provinsi,
                 'kabupaten' => $this->kabupaten,
-                'logo' => 'logo_sekolah/'.time().'.'.$this->logo->extension(),
+                'logo' => 'logo_sekolah/' . time() . '.' . $this->logo->extension(),
             ];
             $sekolah = Sekolah::create($data);
 
-            if($sekolah){
-                $this->logo->storeAs('public/logo_sekolah/', time().'.'.$this->logo->extension());
+            if ($sekolah) {
+                $this->logo->storeAs('public/logo_sekolah/', time() . '.' . $this->logo->extension());
                 $this->alert('success', 'Berhasil Tambah Data');
             }
             $this->closeModal();
-        }  catch (QueryException $exception) {
+        } catch (QueryException $exception) {
             //throw $th;
-            $this->alert('warning', 'Gagal Tambah Data'.$exception);
+            $this->alert('warning', 'Gagal Tambah Data' . $exception);
         }
-
 
         $this->closeModalWithEvents([
             'pg:eventRefresh-default',

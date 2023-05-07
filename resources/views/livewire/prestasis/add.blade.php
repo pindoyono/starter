@@ -38,7 +38,8 @@
                 <div class="sm:col-span-3">
                     <label for="berkas" class="block text-sm font-medium text-gray-700">Berkas Pendukung</label>
                     <div class="mt-1">
-                        <input type="file" wire:model.defer="berkas" id="berkas" autocomplete="berkas"
+                        <input type="file" wire:model.defer="berkas" name="berkas" id="berkas"
+                            autocomplete="berkas"
                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <span class="text-red-500">
                             @error('berkas')

@@ -26,5 +26,6 @@ class Perusahaan extends Model
         'kode_pos',
         'lintang',
         'bujur',
+        'user_id',
     ];
 }

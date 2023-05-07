@@ -3,7 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\Sekolah;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -51,6 +53,7 @@ final class SekolahTable extends PowerGridComponent
                 ->openModal('sekolahs.add', [
                     'confirmationTitle' => 'Tambah Sekolah',
                 ])
+                ->can(Auth::user()->hasRole('admin'))
                 ->class('bg-green-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),
 
@@ -58,6 +61,7 @@ final class SekolahTable extends PowerGridComponent
                 ->caption(__('Bulk delete'))
                 ->class('bg-red-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
                 ->emit('bulkDelete', [])
+                ->can(Auth::user()->hasRole('admin'))
         ];
     }
 
@@ -114,7 +118,11 @@ final class SekolahTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        return Sekolah::query();
+        if (Auth::user()->hasRole('admin')) {
+            return Sekolah::query();
+        } else {
+            return Sekolah::query()->where('user_id', Auth::user()->id);
+        }
     }
 
     /*
@@ -271,6 +279,8 @@ final class SekolahTable extends PowerGridComponent
                 ->openModal('sekolahs.update', [
                     'sekolahId' => 'id',
                     'confirmationTitle' => 'Update User',
+                    'users' => User::query()->select('id', 'name')->get(),
+
                 ])
                 ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm'),
             //    ->route('user.edit', ['user' => 'id']),

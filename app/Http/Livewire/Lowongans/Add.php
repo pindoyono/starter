@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Lowongans;
 
 use App\Models\Lowongan;
+use Illuminate\Support\Facades\Auth;
 use LivewireUI\Modal\ModalComponent;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -21,7 +22,7 @@ class Add extends ModalComponent
 
     public function rules()
     {
-         return [
+        return [
             'job_title' => 'required',
             'job_description' => 'required',
             'job_location' => 'required',
@@ -51,7 +52,6 @@ class Add extends ModalComponent
         $this->closeModal();
     }
 
-
     public function mount(Lowongan $lowongan)
     {
         $this->rules = $this->rules();
@@ -69,14 +69,15 @@ class Add extends ModalComponent
                 'job_salary' => $this->job_salary,
                 'job_requirements' => $this->job_requirements,
                 'job_contact' => $this->job_contact,
+                'user_id' => Auth::user()->id,
+
             ];
             $data = Lowongan::create($data);
             $this->closeModal();
-        }  catch (QueryException $exception) {
+        } catch (QueryException $exception) {
             //throw $th;
-            $this->alert('warning', 'Gagal Tambah Data'.$exception);
+            $this->alert('warning', 'Gagal Tambah Data' . $exception);
         }
-
 
         $this->closeModalWithEvents([
             'pg:eventRefresh-default',

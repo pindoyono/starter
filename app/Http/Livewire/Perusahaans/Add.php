@@ -3,8 +3,9 @@
 namespace App\Http\Livewire\Perusahaans;
 
 use App\Models\Perusahaan;
-use LivewireUI\Modal\ModalComponent;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use LivewireUI\Modal\ModalComponent;
 
 class Add extends ModalComponent
 {
@@ -32,7 +33,7 @@ class Add extends ModalComponent
 
     public function rules()
     {
-         return [
+        return [
             'nama' => 'required',
             'bidang_usaha' => 'required',
             'no_telpon' => 'required',
@@ -60,7 +61,6 @@ class Add extends ModalComponent
     {
         $this->closeModal();
     }
-
 
     public function mount(Perusahaan $sekolah)
     {
@@ -90,14 +90,14 @@ class Add extends ModalComponent
                 'kode_pos' => $this->kode_pos,
                 'lintang' => $this->lintang,
                 'bujur' => $this->bujur,
+                'user_id' => Auth::user()->id,
             ];
             $data = Perusahaan::create($data);
             $this->closeModal();
-        }  catch (QueryException $exception) {
+        } catch (QueryException $exception) {
             //throw $th;
-            $this->alert('warning', 'Gagal Tambah Data'.$exception);
+            $this->alert('warning', 'Gagal Tambah Data' . $exception);
         }
-
 
         $this->closeModalWithEvents([
             'pg:eventRefresh-default',

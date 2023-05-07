@@ -20,6 +20,9 @@ return new class extends Migration
             $table->text('job_requirements')->nullable();
             $table->string('job_contact')->nullable();
             $table->timestamps();
+
+            $table->unsignedBigInteger('user_id')->default(1);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

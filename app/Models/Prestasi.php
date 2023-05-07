@@ -12,6 +12,7 @@ class Prestasi extends Model
         'prestasi',
         'keterangan',
         'berkas',
+        'user_id',
     ];
 
 }
