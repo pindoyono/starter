@@ -127,7 +127,13 @@ final class PrestasiTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        return Prestasi::query();
+        // return Perusahaan::query();
+        if (Auth::user()->hasRole('admin')) {
+             return Prestasi::query();
+            // return Perusahaan::query();
+        } else {
+            return Prestasi::query()->where('user_id', Auth::user()->id);
+        }
     }
 
     /*
