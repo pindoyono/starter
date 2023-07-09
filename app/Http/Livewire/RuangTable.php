@@ -3,16 +3,18 @@
 namespace App\Http\Livewire;
 
 use App\Models\Ruang;
+use App\Models\Perusahaan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Exportable;
 use PowerComponents\LivewirePowerGrid\Footer;
 use PowerComponents\LivewirePowerGrid\Header;
 use PowerComponents\LivewirePowerGrid\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\PowerGridEloquent;
+use PowerComponents\LivewirePowerGrid\Exportable;
 use PowerComponents\LivewirePowerGrid\Rules\Rule;
+use PowerComponents\LivewirePowerGrid\PowerGridEloquent;
+use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Rules\RuleActions;use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 
 final class RuangTable extends PowerGridComponent
@@ -179,7 +181,13 @@ final class RuangTable extends PowerGridComponent
      */
     public function datasource(): Builder
     {
-        return Ruang::query();
+        // return Ruang::query();
+        if (Auth::user()->hasRole('admin')) {
+            return Ruang::query();
+           // return Perusahaan::query();
+       } else {
+           return Ruang::query()->where('user_id', Auth::user()->id);
+       }
     }
 
     /*
